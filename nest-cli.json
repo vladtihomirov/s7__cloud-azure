@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/",
+  "monorepo": true,
+  "root": "apps/user-service",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/user-service/tsconfig.app.json"
+  },
+  "projects": {
+    "user-service": {
+      "type": "application",
+      "root": "apps/user-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-service/tsconfig.app.json"
+      }
+    },
+    "order-service": {
+      "type": "application",
+      "root": "apps/order-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/order-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/order-service/tsconfig.app.json"
+      }
+    },
+    "clothing-service": {
+      "type": "application",
+      "root": "apps/clothing-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/clothing-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/clothing-service/tsconfig.app.json"
+      }
+    },
+    "return-service": {
+      "type": "application",
+      "root": "apps/return-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/return-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/return-service/tsconfig.app.json"
+      }
+    },
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+      }
+    }
+  }
+}
+
