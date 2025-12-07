@@ -1,0 +1,71 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+  schemas  = ["users", "orders", "products"]
+}
+
+model User {
+  user_id String  @id @default(uuid()) @map("user_id")
+  name    String
+  email   String  @unique
+  address String?
+  balance Decimal @default(0) @db.Decimal(10, 2)
+
+  orders Order[]
+
+  @@map("users")
+  @@schema("users")
+}
+
+model Order {
+  order_id     String    @id @default(uuid()) @map("order_id")
+  user_id      String    @map("user_id")
+  status       String    @default("CREATED")
+  priority     String    @default("MEDIUM")
+  address      String?
+  ts_created   DateTime  @default(now()) @map("ts_created")
+  ts_returned  DateTime? @map("ts_returned")
+  ts_delivered DateTime? @map("ts_delivered")
+
+  user       User        @relation(fields: [user_id], references: [user_id])
+  orderItems OrderItem[]
+
+  @@map("orders")
+  @@index([user_id])
+  @@schema("orders")
+}
+
+model OrderItem {
+  order_item_id String @id @default(uuid()) @map("order_item_id")
+  order_id      String @map("order_id")
+  product_code  String @map("product_code")
+  quantity      Int    @default(1)
+
+  order   Order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
+  product Product @relation(fields: [product_code], references: [product_code])
+
+  @@map("order_items")
+  @@index([order_id])
+  @@index([product_code])
+  @@schema("orders")
+}
+
+model Product {
+  product_code  String  @id @map("product_code")
+  name          String
+  description   String?
+  preview_image String? @map("preview_image")
+  price         Decimal @db.Decimal(10, 2)
+  stock_count   Int     @default(0) @map("stock_count")
+  is_enabled    Boolean @default(true) @map("is_enabled")
+
+  orderItems OrderItem[]
+
+  @@map("products")
+  @@schema("products")
+}
